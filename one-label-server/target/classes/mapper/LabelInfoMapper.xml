@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hn.onelabel.server.infrastructure.db.mapper.LabelInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.hn.onelabel.server.infrastructure.db.LabelInfoDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
+        <result column="label_type" jdbcType="VARCHAR" property="labelType"/>
+        <result column="label_name" jdbcType="VARCHAR" property="labelName"/>
+        <result column="label_code" jdbcType="VARCHAR" property="labelCode"/>
+        <result column="label_group_code" jdbcType="VARCHAR" property="labelGroupCode"/>
+        <result column="label_desc" jdbcType="VARCHAR" property="labelDesc"/>
+        <result column="label_rule_id" jdbcType="BIGINT" property="labelRuleId"/>
+        <result column="label_status" jdbcType="VARCHAR" property="labelStatus"/>
+        <result column="label_realtime_type" jdbcType="VARCHAR" property="labelRealtimeType"/>
+        <result column="label_refresh_type" jdbcType="VARCHAR" property="labelRefreshType"/>
+        <result column="label_invalid_type" jdbcType="VARCHAR" property="labelInvalidType"/>
+        <result column="label_invalid_time" jdbcType="TIMESTAMP" property="labelInvalidTime"/>
+        <result column="label_owner" jdbcType="VARCHAR" property="labelOwner"/>
+        <result column="label_creator" jdbcType="VARCHAR" property="labelCreator"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `id`,<include refid="NoPrimaryKey_Column_List"/>
+    </sql>
+
+    <sql id="NoPrimaryKey_Column_List">
+        `create_time`,
+        `update_time`,
+        `deleted`,
+        `label_type`,
+        `label_name`,
+        `label_code`,
+        `label_group_code`,
+        `label_desc`,
+        `label_rule_id`,
+        `label_status`,
+        `label_realtime_type`,
+        `label_refresh_type`,
+        `label_invalid_type`,
+        `label_invalid_time`,
+        `label_owner`,
+        `label_creator`
+    </sql>
+
+    <sql id="NoPrimaryKey_Value_List">
+        #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP},
+        #{deleted,jdbcType=TINYINT},
+        #{labelType,jdbcType=VARCHAR},
+        #{labelName,jdbcType=VARCHAR},
+        #{labelCode,jdbcType=VARCHAR},
+        #{labelGroupCode,jdbcType=VARCHAR},
+        #{labelDesc,jdbcType=VARCHAR},
+        #{labelRuleId,jdbcType=BIGINT},
+        #{labelStatus,jdbcType=VARCHAR},
+        #{labelRealtimeType,jdbcType=VARCHAR},
+        #{labelRefreshType,jdbcType=VARCHAR},
+        #{labelInvalidType,jdbcType=VARCHAR},
+        #{labelInvalidTime,jdbcType=TIMESTAMP},
+        #{labelOwner,jdbcType=VARCHAR},
+        #{labelCreator,jdbcType=VARCHAR}
+    </sql>
+
+    <sql id="Item_NoPrimaryKey_Value_List">
+        #{item.createTime,jdbcType=TIMESTAMP},
+        #{item.updateTime,jdbcType=TIMESTAMP},
+        #{item.deleted,jdbcType=TINYINT},
+        #{item.labelType,jdbcType=VARCHAR},
+        #{item.labelName,jdbcType=VARCHAR},
+        #{item.labelCode,jdbcType=VARCHAR},
+        #{item.labelGroupCode,jdbcType=VARCHAR},
+        #{item.labelDesc,jdbcType=VARCHAR},
+        #{item.labelRuleId,jdbcType=BIGINT},
+        #{item.labelStatus,jdbcType=VARCHAR},
+        #{item.labelRealtimeType,jdbcType=VARCHAR},
+        #{item.labelRefreshType,jdbcType=VARCHAR},
+        #{item.labelInvalidType,jdbcType=VARCHAR},
+        #{item.labelInvalidTime,jdbcType=TIMESTAMP},
+        #{item.labelOwner,jdbcType=VARCHAR},
+        #{item.labelCreator,jdbcType=VARCHAR}
+    </sql>
+
+    <insert id="insertEntity" useGeneratedKeys="true" keyProperty="id" parameterType="com.hn.onelabel.server.infrastructure.db.LabelInfoDO">
+        INSERT INTO label_info(<include refid="NoPrimaryKey_Column_List"/>)
+        VALUE (<include refid="NoPrimaryKey_Value_List"/>)
+    </insert>
+
+    <insert id="batchInsert">
+        INSERT INTO label_info(<include refid="NoPrimaryKey_Column_List"/>)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (<include refid="Item_NoPrimaryKey_Value_List"/>)
+        </foreach>
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM label_info
+        WHERE `id`=#{id} AND `deleted`=0
+    </select>
+
+    <select id="selectByPrimaryKeyList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM label_info
+        WHERE `deleted`=0 AND `id` IN
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <update id="updateByPrimaryKey" parameterType="com.hn.onelabel.server.infrastructure.db.LabelInfoDO">
+        UPDATE label_info
+        <set>
+            <if test="updateTime != null">
+                `update_time` = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted != null">
+                `deleted` = #{deleted,jdbcType=INTEGER},
+            </if>
+            <if test="labelName != null">
+                `label_name` = #{labelName,jdbcType=VARCHAR},
+            </if>
+            <if test="labelDesc != null">
+                `label_desc` = #{labelDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="labelRuleId != null">
+                `label_rule_id` = #{labelRuleId,jdbcType=BIGINT},
+            </if>
+            <if test="labelStatus != null">
+                `label_status` = #{labelStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="labelRealtimeType != null">
+                `label_realtime_type` = #{labelRealtimeType,jdbcType=VARCHAR},
+            </if>
+            <if test="labelRefreshType != null">
+                `label_refresh_type` = #{labelRefreshType,jdbcType=VARCHAR},
+            </if>
+            <if test="labelInvalidType != null">
+                `label_invalid_type` = #{labelInvalidType,jdbcType=VARCHAR},
+            </if>
+            <if test="labelValidTime != null">
+                `label_valid_time` = #{labelValidTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="labelOwner != null">
+                `label_owner` = #{labelOwner,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE `id`=#{id}
+    </update>
+
+    <delete id="logicalDeleteByPrimaryKey" parameterType="java.lang.Long">
+        UPDATE label_info SET `deleted`=1 WHERE `id`=#{id}
+    </delete>
+
+    <delete id="physicalDeleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM label_info WHERE `id`=#{id}
+    </delete>
+
+    <select id="selectByCondition" parameterType="com.hn.onelabel.server.infrastructure.db.query.LabelInfoQuery" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM label_info
+        WHERE deleted=0
+        <if test="labelType != null">
+            AND `label_type` = #{labelType,jdbcType=VARCHAR}
+        </if>
+        <if test="labelNameKeywords != null">
+            AND `label_name` LIKE CONCAT('%', #{labelNameKeywords,jdbcType=VARCHAR} ,'%')
+        </if>
+        <if test="labelCode != null">
+            AND `label_code` = #{labelCode,jdbcType=VARCHAR}
+        </if>
+        <if test="labelGroupCode != null">
+            AND `label_group_code` = #{labelGroupCode,jdbcType=VARCHAR}
+        </if>
+        <if test="labelStatus != null">
+            AND `label_status` = #{labelStatus,jdbcType=VARCHAR}
+        </if>
+        <if test="labelRealtimeType != null">
+            AND `label_realtime_type` = #{labelRealtimeType,jdbcType=VARCHAR}
+        </if>
+        <if test="labelRefreshType != null">
+            AND `label_refresh_type` = #{labelRefreshType,jdbcType=VARCHAR}
+        </if>
+        <if test="labelInvalidType != null">
+            AND `label_invalid_type` = #{labelInvalidType,jdbcType=VARCHAR}
+        </if>
+        <if test="labelCreatorKeyword != null">
+            AND `label_creator` = LIKE CONCAT('%', #{labelCreatorKeyword,jdbcType=VARCHAR} ,'%')
+        </if>
+        <if test="useSorting == true">
+            ORDER BY
+            <foreach collection="sortModelList" item="sortModel" separator=",">
+                ${sortModel.sortField} ${sortModel.sortType}
+            </foreach>
+        </if>
+        <if test="usePaging == true">
+            LIMIT #{offset},#{rows}
+        </if>
+    </select>
+
+</mapper>

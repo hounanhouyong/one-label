@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hn.onelabel.server.infrastructure.db.mapper.LabelDimensionDataMapper">
+
+    <resultMap id="BaseResultMap" type="com.hn.onelabel.server.infrastructure.db.LabelDimensionDataDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="label_dimension_key_id" jdbcType="BIGINT" property="labelDimensionKeyId"/>
+        <result column="label_dimension" jdbcType="VARCHAR" property="labelDimension"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `id`,<include refid="NoPrimaryKey_Column_List"/>
+    </sql>
+
+    <sql id="NoPrimaryKey_Column_List">
+        `create_time`,
+        `update_time`,
+        `deleted`,
+        `user_id`,
+        `label_dimension_key_id`,
+        `label_dimension`
+    </sql>
+
+    <sql id="NoPrimaryKey_Value_List">
+        #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP},
+        #{deleted,jdbcType=TINYINT},
+        #{userId,jdbcType=BIGINT},
+        #{labelDimensionKeyId,jdbcType=BIGINT},
+        #{labelDimension,jdbcType=VARCHAR}
+    </sql>
+
+    <sql id="Item_NoPrimaryKey_Value_List">
+        #{item.createTime,jdbcType=TIMESTAMP},
+        #{item.updateTime,jdbcType=TIMESTAMP},
+        #{item.deleted,jdbcType=TINYINT},
+        #{item.userId,jdbcType=BIGINT},
+        #{item.labelDimensionKeyId,jdbcType=BIGINT},
+        #{item.labelDimension,jdbcType=VARCHAR}
+    </sql>
+
+    <insert id="insertEntityOnDuplicateKeyUpdate" useGeneratedKeys="true" keyProperty="id" parameterType="com.hn.onelabel.server.infrastructure.db.LabelDimensionDataDO">
+        INSERT INTO label_dimension_data(<include refid="NoPrimaryKey_Column_List"/>)
+        VALUE (<include refid="NoPrimaryKey_Value_List"/>)
+        ON DUPLICATE KEY UPDATE `label_dimension`=#{labelDimension,jdbcType=VARCHAR}
+    </insert>
+
+    <select id="selectByUserIdAndId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM label_dimension_data
+        WHERE `user_id`=#{userId} AND `id`=#{id} AND `deleted`=0
+    </select>
+
+    <select id="selectByUserIdAndDimensionKeyId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM label_dimension_data
+        WHERE `user_id`=#{userId} AND `label_dimension_key_id`=#{labelDimensionKeyId} AND `deleted`=0
+    </select>
+
+    <select id="selectByUserIdAndDimensionKeyIdList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM label_dimension_data
+        WHERE `user_id`=#{userId} AND deleted=0
+        <if test="labelDimensionKeyIdList != null">
+            AND `label_dimension_key_id` IN (
+            <foreach collection="labelDimensionKeyIdList" item="labelDimensionKeyId" separator=",">
+                #{labelDimensionKeyId}
+            </foreach>
+            )
+        </if>
+    </select>
+
+</mapper>

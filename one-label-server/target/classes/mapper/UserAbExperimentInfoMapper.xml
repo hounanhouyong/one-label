@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hn.onelabel.server.infrastructure.db.mapper.UserAbExperimentInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.hn.onelabel.server.infrastructure.db.UserAbExperimentInfoDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
+        <result column="segment_rule_id" jdbcType="BIGINT" property="segmentRuleId"/>
+        <result column="experiment_id" jdbcType="VARCHAR" property="experimentId"/>
+        <result column="weight" jdbcType="INTEGER" property="weight"/>
+        <result column="external_experiment_group_id" jdbcType="VARCHAR" property="externalExperimentGroupId"/>
+        <result column="external_experiment_code" jdbcType="VARCHAR" property="externalExperimentCode"/>
+        <result column="external_experiment_ext_info" jdbcType="VARCHAR" property="externalExperimentExtInfo"/>
+        <result column="external_experiment_tag" jdbcType="VARCHAR" property="externalExperimentTag"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="modifier" jdbcType="VARCHAR" property="modifier"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `id`,<include refid="NoPrimaryKey_Column_List"/>
+    </sql>
+
+    <sql id="NoPrimaryKey_Column_List">
+        `create_time`,
+        `update_time`,
+        `deleted`,
+        `segment_rule_id`,
+        `experiment_id`,
+        `weight`,
+        `external_experiment_group_id`,
+        `external_experiment_code`,
+        `external_experiment_ext_info`,
+        `external_experiment_tag`,
+        `creator`,
+        `modifier`
+    </sql>
+
+    <sql id="NoPrimaryKey_Value_List">
+        #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP},
+        #{deleted,jdbcType=TINYINT},
+        #{segmentRuleId,jdbcType=BIGINT},
+        #{experimentId,jdbcType=VARCHAR},
+        #{weight,jdbcType=INTEGER},
+        #{externalExperimentGroupId,jdbcType=VARCHAR},
+        #{externalExperimentCode,jdbcType=VARCHAR},
+        #{externalExperimentExtInfo,jdbcType=VARCHAR},
+        #{externalExperimentTag,jdbcType=VARCHAR},
+        #{creator,jdbcType=VARCHAR},
+        #{modifier,jdbcType=VARCHAR}
+    </sql>
+
+    <sql id="Item_NoPrimaryKey_Value_List">
+        #{item.createTime,jdbcType=TIMESTAMP},
+        #{item.updateTime,jdbcType=TIMESTAMP},
+        #{item.deleted,jdbcType=TINYINT},
+        #{item.segmentRuleId,jdbcType=BIGINT},
+        #{item.experimentId,jdbcType=VARCHAR},
+        #{item.weight,jdbcType=INTEGER},
+        #{item.externalExperimentGroupId,jdbcType=VARCHAR},
+        #{item.externalExperimentCode,jdbcType=VARCHAR},
+        #{item.externalExperimentExtInfo,jdbcType=VARCHAR},
+        #{item.externalExperimentTag,jdbcType=VARCHAR},
+        #{item.creator,jdbcType=VARCHAR},
+        #{item.modifier,jdbcType=VARCHAR}
+    </sql>
+
+    <insert id="insertEntity" useGeneratedKeys="true" keyProperty="id" parameterType="com.hn.onelabel.server.infrastructure.db.UserAbExperimentInfoDO">
+        INSERT INTO user_ab_experiment_info(<include refid="NoPrimaryKey_Column_List"/>)
+        VALUE (<include refid="NoPrimaryKey_Value_List"/>)
+    </insert>
+
+    <insert id="batchInsert">
+        INSERT INTO user_ab_experiment_info(<include refid="NoPrimaryKey_Column_List"/>)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (<include refid="Item_NoPrimaryKey_Value_List"/>)
+        </foreach>
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM user_ab_experiment_info
+        WHERE `id`=#{id} AND `deleted`=0
+    </select>
+
+    <select id="selectByPrimaryKeyList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM user_ab_experiment_info
+        WHERE `deleted`=0 AND `id` IN
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <update id="updateByPrimaryKey" parameterType="com.hn.onelabel.server.infrastructure.db.UserAbExperimentInfoDO">
+        UPDATE user_ab_experiment_info
+        <set>
+            <if test="updateTime != null">
+                `update_time` = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted != null">
+                `deleted` = #{deleted,jdbcType=INTEGER},
+            </if>
+            <if test="externalExperimentGroupId != null">
+                `external_experiment_group_id` = #{externalExperimentGroupId,jdbcType=VARCHAR},
+            </if>
+            <if test="externalExperimentCode != null">
+                `external_experiment_Code` = #{externalExperimentCode,jdbcType=VARCHAR},
+            </if>
+            <if test="externalExperimentExtInfo != null">
+                `external_experiment_ext_info` = #{externalExperimentExtInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="externalExperimentTag != null">
+                `external_experiment_tag` = #{externalExperimentTag,jdbcType=VARCHAR},
+            </if>
+            <if test="weight != null">
+                `weight` = #{weight,jdbcType=INTEGER},
+            </if>
+            <if test="modifier != null">
+                `modifier` = #{modifier,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE `id`=#{id}
+    </update>
+
+    <delete id="logicalDeleteByPrimaryKey" parameterType="java.lang.Long">
+        UPDATE user_ab_experiment_info SET `deleted`=1 WHERE `id`=#{id}
+    </delete>
+
+    <delete id="physicalDeleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM user_ab_experiment_info WHERE `id`=#{id}
+    </delete>
+
+    <select id="selectByCondition" parameterType="com.hn.onelabel.server.infrastructure.db.query.UserAbExperimentInfoQuery" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM user_ab_experiment_info
+        WHERE deleted=0
+        <if test="segmentRuleId != null">
+            AND `segment_rule_id` = #{segmentRuleId,jdbcType=BIGINT}
+        </if>
+        <if test="experimentId != null">
+            AND `experiment_id` = #{experimentId,jdbcType=BIGINT}
+        </if>
+        <if test="experimentIdList != null">
+            AND `experiment_id` IN (
+            <foreach collection="experimentIdList" item="experimentId" separator=",">
+                #{experimentId}
+            </foreach>
+            )
+        </if>
+        <if test="useSorting == true">
+            ORDER BY
+            <foreach collection="sortModelList" item="sortModel" separator=",">
+                ${sortModel.sortField} ${sortModel.sortType}
+            </foreach>
+        </if>
+        <if test="usePaging == true">
+            LIMIT #{offset},#{rows}
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,117 @@
+{
+  "groups": [
+    {
+      "name": "elasticsearch",
+      "type": "com.hn.onelabel.server.infrastructure.es.ElasticsearchProperties",
+      "sourceType": "com.hn.onelabel.server.infrastructure.es.ElasticsearchProperties"
+    },
+    {
+      "name": "oss.client.config",
+      "type": "com.hn.onelabel.server.infrastructure.oss.OssProperties",
+      "sourceType": "com.hn.onelabel.server.infrastructure.oss.OssProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "elasticsearch.cluster-name",
+      "type": "java.lang.String",
+      "sourceType": "com.hn.onelabel.server.infrastructure.es.ElasticsearchProperties"
+    },
+    {
+      "name": "elasticsearch.connect-request-timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.hn.onelabel.server.infrastructure.es.ElasticsearchProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "elasticsearch.connect-timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.hn.onelabel.server.infrastructure.es.ElasticsearchProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "elasticsearch.index",
+      "type": "java.lang.String",
+      "sourceType": "com.hn.onelabel.server.infrastructure.es.ElasticsearchProperties"
+    },
+    {
+      "name": "elasticsearch.ip",
+      "type": "java.lang.String",
+      "sourceType": "com.hn.onelabel.server.infrastructure.es.ElasticsearchProperties"
+    },
+    {
+      "name": "elasticsearch.password",
+      "type": "java.lang.String",
+      "sourceType": "com.hn.onelabel.server.infrastructure.es.ElasticsearchProperties"
+    },
+    {
+      "name": "elasticsearch.port",
+      "type": "java.lang.Integer",
+      "sourceType": "com.hn.onelabel.server.infrastructure.es.ElasticsearchProperties",
+      "defaultValue": 9200
+    },
+    {
+      "name": "elasticsearch.schema",
+      "type": "java.lang.String",
+      "sourceType": "com.hn.onelabel.server.infrastructure.es.ElasticsearchProperties",
+      "defaultValue": "http"
+    },
+    {
+      "name": "elasticsearch.socket-timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.hn.onelabel.server.infrastructure.es.ElasticsearchProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "elasticsearch.url",
+      "type": "java.lang.String",
+      "sourceType": "com.hn.onelabel.server.infrastructure.es.ElasticsearchProperties"
+    },
+    {
+      "name": "elasticsearch.username",
+      "type": "java.lang.String",
+      "sourceType": "com.hn.onelabel.server.infrastructure.es.ElasticsearchProperties"
+    },
+    {
+      "name": "oss.client.config.access-key-id",
+      "type": "java.lang.String",
+      "sourceType": "com.hn.onelabel.server.infrastructure.oss.OssProperties"
+    },
+    {
+      "name": "oss.client.config.access-key-secret",
+      "type": "java.lang.String",
+      "sourceType": "com.hn.onelabel.server.infrastructure.oss.OssProperties"
+    },
+    {
+      "name": "oss.client.config.external-end-point",
+      "type": "java.lang.String",
+      "sourceType": "com.hn.onelabel.server.infrastructure.oss.OssProperties"
+    },
+    {
+      "name": "oss.client.config.file-bucket-name",
+      "type": "java.lang.String",
+      "sourceType": "com.hn.onelabel.server.infrastructure.oss.OssProperties"
+    },
+    {
+      "name": "oss.client.config.folder",
+      "type": "java.lang.String",
+      "sourceType": "com.hn.onelabel.server.infrastructure.oss.OssProperties"
+    },
+    {
+      "name": "oss.client.config.img-bucket-name",
+      "type": "java.lang.String",
+      "sourceType": "com.hn.onelabel.server.infrastructure.oss.OssProperties"
+    },
+    {
+      "name": "oss.client.config.internal-end-point",
+      "type": "java.lang.String",
+      "sourceType": "com.hn.onelabel.server.infrastructure.oss.OssProperties"
+    },
+    {
+      "name": "oss.client.config.video-bucket-name",
+      "type": "java.lang.String",
+      "sourceType": "com.hn.onelabel.server.infrastructure.oss.OssProperties"
+    }
+  ],
+  "hints": []
+}

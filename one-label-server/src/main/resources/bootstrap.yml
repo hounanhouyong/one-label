@@ -1,0 +1,75 @@
+server:
+  port: 8080
+  tomcat:
+    # 并发处理线程数
+    max-threads: 1000
+    # 最大连接数
+    max-connections: 20000
+    # 最小空闲数
+    min-spare-threads: 100
+    uri-encoding: UTF-8
+    #内嵌tomcat安全漏洞处理
+    port-header: HEAD,PUT,DELETE,OPTIONS,TRACE,COPY,SEARCH,PROPFIND
+
+spring:
+  application:
+    name: one-label
+  profiles:
+    active: loc
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 600MB
+      max-request-size: 600MB
+  main:
+    allow-bean-definition-overriding: true
+
+ribbon:
+  ReadTimeout: 60000
+  ConnectTimeout: 60000
+
+#健康检查配置
+management:
+  #指定访问ip
+  endpoints:
+    web:
+      path-mapping:
+        shutdown: /stopServer
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+#日志配置
+logging:
+  config: classpath:log4j2.xml
+  file:
+    name: one-label  #只对loc生成的文件
+    path: /log/one-label #文件保存路径
+  level:
+    com:
+      alibaba:
+        nacos: error
+
+
+---
+spring:
+  profiles: pro
+  cloud:
+    nacos:
+      discovery:
+        server-addr: xxx
+        namespace: xxx
+      config:
+        enabled: true
+        file-extension: yaml
+        namespace: ${spring.cloud.nacos.discovery.namespace}
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        group: one-label
+        name: one_label_bootstrap

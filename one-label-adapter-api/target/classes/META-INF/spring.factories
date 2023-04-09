@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.hn.onelabel.adapter.api.autoconfigure.OneLabelAdapterConfigAutoConfiguration

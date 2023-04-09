@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hn.onelabel.server.infrastructure.db.mapper.LabelRuleInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.hn.onelabel.server.infrastructure.db.LabelRuleInfoDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
+        <result column="rule_context_id" jdbcType="BIGINT" property="ruleContextId"/>
+        <result column="rule_group_id" jdbcType="BIGINT" property="ruleGroupId"/>
+        <result column="rule_type" jdbcType="VARCHAR" property="ruleType"/>
+        <result column="rule_name" jdbcType="VARCHAR" property="ruleName"/>
+        <result column="rule_desc" jdbcType="VARCHAR" property="ruleDesc"/>
+        <result column="rule_status" jdbcType="VARCHAR" property="ruleStatus"/>
+        <result column="rule_effective_start_time" jdbcType="TIMESTAMP" property="ruleEffectiveStartTime"/>
+        <result column="rule_effective_end_time" jdbcType="TIMESTAMP" property="ruleEffectiveEndTime"/>
+        <result column="rule_script_type" jdbcType="VARCHAR" property="ruleScriptType"/>
+        <result column="rule_script_content" jdbcType="VARCHAR" property="ruleScriptContent"/>
+        <result column="label_code" jdbcType="VARCHAR" property="labelCode"/>
+        <result column="label_dimension_key_id" jdbcType="BIGINT" property="labelDimensionKeyId"/>
+        <result column="label_dimension_key_define_type" jdbcType="VARCHAR" property="labelDimensionKeyDefineType"/>
+        <result column="label_dimension_fixed_key" jdbcType="VARCHAR" property="labelDimensionFixedKey"/>
+        <result column="external_tag" jdbcType="VARCHAR" property="externalTag"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="modifier" jdbcType="VARCHAR" property="modifier"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `id`,<include refid="NoPrimaryKey_Column_List"/>
+    </sql>
+
+    <sql id="NoPrimaryKey_Column_List">
+        `create_time`,
+        `update_time`,
+        `deleted`,
+        `rule_context_id`,
+        `rule_group_id`,
+        `rule_type`,
+        `rule_name`,
+        `rule_desc`,
+        `rule_status`,
+        `rule_effective_start_time`,
+        `rule_effective_end_time`,
+        `rule_script_type`,
+        `rule_script_content`,
+        `label_code`,
+        `label_dimension_key_id`,
+        `label_dimension_key_define_type`,
+        `label_dimension_fixed_key`,
+        `external_tag`,
+        `creator`,
+        `modifier`
+    </sql>
+
+    <sql id="NoPrimaryKey_Value_List">
+        #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP},
+        #{deleted,jdbcType=TINYINT},
+        #{ruleContextId,jdbcType=BIGINT},
+        #{ruleGroupId,jdbcType=BIGINT},
+        #{ruleType,jdbcType=VARCHAR},
+        #{ruleName,jdbcType=VARCHAR},
+        #{ruleDesc,jdbcType=VARCHAR},
+        #{ruleStatus,jdbcType=VARCHAR},
+        #{ruleEffectiveStartTime,jdbcType=TIMESTAMP},
+        #{ruleEffectiveEndTime,jdbcType=TIMESTAMP},
+        #{ruleScriptType,jdbcType=VARCHAR},
+        #{ruleScriptContent,jdbcType=VARCHAR},
+        #{labelCode,jdbcType=VARCHAR},
+        #{labelDimensionKeyId,jdbcType=BIGINT},
+        #{labelDimensionKeyDefineType,jdbcType=VARCHAR},
+        #{labelDimensionFixedKey,jdbcType=VARCHAR},
+        #{externalTag,jdbcType=VARCHAR},
+        #{creator,jdbcType=VARCHAR},
+        #{modifier,jdbcType=VARCHAR}
+    </sql>
+
+    <sql id="Item_NoPrimaryKey_Value_List">
+        #{item.createTime,jdbcType=TIMESTAMP},
+        #{item.updateTime,jdbcType=TIMESTAMP},
+        #{item.deleted,jdbcType=TINYINT},
+        #{item.ruleContextId,jdbcType=BIGINT},
+        #{item.ruleGroupId,jdbcType=BIGINT},
+        #{item.ruleType,jdbcType=VARCHAR},
+        #{item.ruleName,jdbcType=VARCHAR},
+        #{item.ruleDesc,jdbcType=VARCHAR},
+        #{item.ruleStatus,jdbcType=VARCHAR},
+        #{item.ruleEffectiveStartTime,jdbcType=TIMESTAMP},
+        #{item.ruleEffectiveEndTime,jdbcType=TIMESTAMP},
+        #{item.ruleScriptType,jdbcType=VARCHAR},
+        #{item.ruleScriptContent,jdbcType=VARCHAR},
+        #{item.labelCode,jdbcType=VARCHAR},
+        #{item.labelDimensionKeyId,jdbcType=BIGINT},
+        #{item.labelDimensionKeyDefineType,jdbcType=VARCHAR},
+        #{item.labelDimensionFixedKey,jdbcType=VARCHAR},
+        #{item.externalTag,jdbcType=VARCHAR},
+        #{item.creator,jdbcType=VARCHAR},
+        #{item.modifier,jdbcType=VARCHAR}
+    </sql>
+
+    <insert id="insertEntity" useGeneratedKeys="true" keyProperty="id" parameterType="com.hn.onelabel.server.infrastructure.db.LabelRuleInfoDO">
+        INSERT INTO label_rule_info(<include refid="NoPrimaryKey_Column_List"/>)
+        VALUE (<include refid="NoPrimaryKey_Value_List"/>)
+    </insert>
+
+    <insert id="batchInsert">
+        INSERT INTO label_rule_info(<include refid="NoPrimaryKey_Column_List"/>)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (<include refid="Item_NoPrimaryKey_Value_List"/>)
+        </foreach>
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM label_rule_info
+        WHERE `id`=#{id} AND `deleted`=0
+    </select>
+
+    <select id="selectByPrimaryKeyList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM label_rule_info
+        WHERE `deleted`=0 AND `id` IN
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <update id="updateByPrimaryKey" parameterType="com.hn.onelabel.server.infrastructure.db.LabelRuleInfoDO">
+        UPDATE label_rule_info
+        <set>
+            <if test="updateTime != null">
+                `update_time` = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted != null">
+                `deleted` = #{deleted,jdbcType=INTEGER},
+            </if>
+            <if test="ruleName != null">
+                `rule_name` = #{ruleName,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleDesc != null">
+                `rule_desc` = #{ruleDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleStatus != null">
+                `rule_status` = #{ruleStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleEffectiveStartTime != null">
+                `rule_effective_start_time` = #{ruleEffectiveStartTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ruleEffectiveEndTime != null">
+                `rule_effective_end_time` = #{ruleEffectiveEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="externalTag != null">
+                `external_tag` = #{externalTag,jdbcType=VARCHAR},
+            </if>
+            <if test="modifier != null">
+                `modifier` = #{modifier,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE `id`=#{id}
+    </update>
+
+    <delete id="logicalDeleteByPrimaryKey" parameterType="java.lang.Long">
+        UPDATE label_rule_info SET `deleted`=1 WHERE `id`=#{id}
+    </delete>
+
+    <delete id="physicalDeleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM label_rule_info WHERE `id`=#{id}
+    </delete>
+
+    <select id="selectByCondition" parameterType="com.hn.onelabel.server.infrastructure.db.query.LabelRuleInfoQuery" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM label_rule_info
+        WHERE deleted=0
+        <if test="ruleContextId != null">
+            AND `rule_context_id` = #{ruleContextId,jdbcType=BIGINT}
+        </if>
+        <if test="ruleGroupId != null">
+            AND `rule_group_id` = #{ruleGroupId,jdbcType=BIGINT}
+        </if>
+        <if test="labelCode != null">
+            AND `label_code` = #{labelCode,jdbcType=VARCHAR}
+        </if>
+        <if test="ruleStatus != null">
+            AND `rule_status` = #{ruleStatus,jdbcType=VARCHAR}
+        </if>
+        <if test="labelDimensionFixedKey != null">
+            AND `label_dimension_fixed_key` = #{labelDimensionFixedKey,jdbcType=VARCHAR}
+        </if>
+        <if test="labelDimensionFixedKeyList != null">
+            AND `label_dimension_fixed_key` IN (
+            <foreach collection="labelDimensionFixedKeyList" item="labelDimensionFixedKey" separator=",">
+                #{labelDimensionFixedKey}
+            </foreach>
+            )
+        </if>
+        <if test="isValid == true">
+            <![CDATA[AND `rule_effective_start_time` <= now() AND `rule_effective_end_time` > now()]]>
+        </if>
+        <if test="useSorting == true">
+            ORDER BY
+            <foreach collection="sortModelList" item="sortModel" separator=",">
+                ${sortModel.sortField} ${sortModel.sortType}
+            </foreach>
+        </if>
+        <if test="usePaging == true">
+            LIMIT #{offset},#{rows}
+        </if>
+    </select>
+
+</mapper>

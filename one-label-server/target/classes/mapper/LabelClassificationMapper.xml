@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hn.onelabel.server.infrastructure.db.mapper.LabelClassificationMapper">
+
+    <resultMap id="BaseResultMap" type="com.hn.onelabel.server.infrastructure.db.LabelClassificationDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
+        <result column="classification_name" jdbcType="VARCHAR" property="classificationName"/>
+        <result column="classification_code" jdbcType="VARCHAR" property="classificationCode"/>
+        <result column="classification_parent_id" jdbcType="BIGINT" property="classificationParentId"/>
+        <result column="classification_level" jdbcType="INTEGER" property="classificationLevel"/>
+        <result column="classification_path" jdbcType="VARCHAR" property="classificationPath"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `id`,<include refid="NoPrimaryKey_Column_List"/>
+    </sql>
+
+    <sql id="NoPrimaryKey_Column_List">
+        `create_time`,
+        `update_time`,
+        `deleted`,
+        `classification_name`,
+        `classification_code`,
+        `classification_parent_id`,
+        `classification_level`,
+        `classification_path`,
+        `creator`
+    </sql>
+
+    <sql id="NoPrimaryKey_Value_List">
+        #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP},
+        #{deleted,jdbcType=TINYINT},
+        #{classificationName,jdbcType=VARCHAR},
+        #{classificationCode,jdbcType=VARCHAR},
+        #{classificationParentId,jdbcType=BIGINT},
+        #{classificationLevel,jdbcType=INTEGER},
+        #{classificationPath,jdbcType=VARCHAR},
+        #{creator,jdbcType=VARCHAR}
+    </sql>
+
+    <sql id="Item_NoPrimaryKey_Value_List">
+        #{item.createTime,jdbcType=TIMESTAMP},
+        #{item.updateTime,jdbcType=TIMESTAMP},
+        #{item.deleted,jdbcType=TINYINT},
+        #{item.classificationName,jdbcType=VARCHAR},
+        #{item.classificationCode,jdbcType=VARCHAR},
+        #{item.classificationParentId,jdbcType=BIGINT},
+        #{item.classificationLevel,jdbcType=INTEGER},
+        #{item.classificationPath,jdbcType=VARCHAR},
+        #{item.creator,jdbcType=VARCHAR}
+    </sql>
+
+    <insert id="insertEntity" useGeneratedKeys="true" keyProperty="id" parameterType="com.hn.onelabel.server.infrastructure.db.LabelClassificationDO">
+        INSERT INTO label_classification(<include refid="NoPrimaryKey_Column_List"/>)
+        VALUE (<include refid="NoPrimaryKey_Value_List"/>)
+    </insert>
+
+    <insert id="batchInsert">
+        INSERT INTO label_classification(<include refid="NoPrimaryKey_Column_List"/>)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (<include refid="Item_NoPrimaryKey_Value_List"/>)
+        </foreach>
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM label_classification
+        WHERE `id`=#{id} AND `deleted`=0
+    </select>
+
+    <select id="selectByPrimaryKeyList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM label_classification
+        WHERE `deleted`=0 AND `id` IN
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <update id="updateByPrimaryKey" parameterType="com.hn.onelabel.server.infrastructure.db.LabelClassificationDO">
+        UPDATE label_classification
+        <set>
+            <if test="updateTime != null">
+                `update_time` = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted != null">
+                `deleted` = #{deleted,jdbcType=INTEGER},
+            </if>
+            <if test="classificationName != null">
+                `classification_name` = #{classificationName,jdbcType=VARCHAR},
+            </if>
+            <if test="classificationParentId != null">
+                `classification_parent_id` = #{classificationParentId,jdbcType=BIGINT},
+            </if>
+            <if test="classificationLevel != null">
+                `classification_level` = #{classificationLevel,jdbcType=INTEGER},
+            </if>
+            <if test="classificationPath != null">
+                `classification_path` = #{classificationPath,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE `id`=#{id}
+    </update>
+
+    <delete id="logicalDeleteByPrimaryKey" parameterType="java.lang.Long">
+        UPDATE label_classification SET `deleted`=1 WHERE `id`=#{id}
+    </delete>
+
+    <delete id="physicalDeleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM label_classification WHERE `id`=#{id}
+    </delete>
+
+    <select id="selectByCondition" parameterType="com.hn.onelabel.infrastructure.db.query.LabelClassificationQuery" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM label_classification
+        WHERE deleted=0
+        <if test="classificationNameKeywords != null">
+            AND `classification_name` LIKE CONCAT('%', #{classificationNameKeywords,jdbcType=VARCHAR} ,'%')
+        </if>
+        <if test="classificationCode != null">
+            AND `classification_code` = #{classificationCode,jdbcType=VARCHAR}
+        </if>
+        <if test="classificationParentId != null">
+            AND `classification_parent_id` = #{classificationParentId,jdbcType=BIGINT}
+        </if>
+        <if test="creatorKeyword != null">
+            AND `creator` = LIKE CONCAT('%', #{creatorKeyword,jdbcType=VARCHAR} ,'%')
+        </if>
+        <if test="useSorting == true">
+            ORDER BY
+            <foreach collection="sortModelList" item="sortModel" separator=",">
+                ${sortModel.sortField} ${sortModel.sortType}
+            </foreach>
+        </if>
+        <if test="usePaging == true">
+            LIMIT #{offset},#{rows}
+        </if>
+    </select>
+
+</mapper>

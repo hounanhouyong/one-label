@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hn.onelabel.server.infrastructure.db.mapper.LabelGroupMapper">
+
+    <resultMap id="BaseResultMap" type="com.hn.onelabel.server.infrastructure.db.LabelGroupDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
+        <result column="label_group_name" jdbcType="VARCHAR" property="labelGroupName"/>
+        <result column="label_group_code" jdbcType="VARCHAR" property="labelGroupCode"/>
+        <result column="label_group_desc" jdbcType="VARCHAR" property="labelGroupDesc"/>
+        <result column="label_classification_id" jdbcType="BIGINT" property="labelClassificationId"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `id`,<include refid="NoPrimaryKey_Column_List"/>
+    </sql>
+
+    <sql id="NoPrimaryKey_Column_List">
+        `create_time`,
+        `update_time`,
+        `deleted`,
+        `label_group_name`,
+        `label_group_code`,
+        `label_group_desc`,
+        `label_classification_id`,
+        `creator`
+    </sql>
+
+    <sql id="NoPrimaryKey_Value_List">
+        #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP},
+        #{deleted,jdbcType=TINYINT},
+        #{labelGroupName,jdbcType=VARCHAR},
+        #{labelGroupCode,jdbcType=VARCHAR},
+        #{labelGroupDesc,jdbcType=VARCHAR},
+        #{labelClassificationId,jdbcType=BIGINT},
+        #{creator,jdbcType=VARCHAR}
+    </sql>
+
+    <sql id="Item_NoPrimaryKey_Value_List">
+        #{item.createTime,jdbcType=TIMESTAMP},
+        #{item.updateTime,jdbcType=TIMESTAMP},
+        #{item.deleted,jdbcType=TINYINT},
+        #{item.labelGroupName,jdbcType=VARCHAR},
+        #{item.labelGroupCode,jdbcType=VARCHAR},
+        #{item.labelGroupDesc,jdbcType=VARCHAR},
+        #{item.labelClassificationId,jdbcType=BIGINT},
+        #{item.creator,jdbcType=VARCHAR}
+    </sql>
+
+    <insert id="insertEntity" useGeneratedKeys="true" keyProperty="id" parameterType="com.hn.onelabel.server.infrastructure.db.LabelGroupDO">
+        INSERT INTO label_group(<include refid="NoPrimaryKey_Column_List"/>)
+        VALUE (<include refid="NoPrimaryKey_Value_List"/>)
+    </insert>
+
+    <insert id="batchInsert">
+        INSERT INTO label_group(<include refid="NoPrimaryKey_Column_List"/>)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (<include refid="Item_NoPrimaryKey_Value_List"/>)
+        </foreach>
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM label_group
+        WHERE `id`=#{id} AND `deleted`=0
+    </select>
+
+    <select id="selectByPrimaryKeyList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM label_group
+        WHERE `deleted`=0 AND `id` IN
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <update id="updateByPrimaryKey" parameterType="com.hn.onelabel.server.infrastructure.db.LabelGroupDO">
+        UPDATE label_group
+        <set>
+            <if test="updateTime != null">
+                `update_time` = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted != null">
+                `deleted` = #{deleted,jdbcType=INTEGER},
+            </if>
+            <if test="labelGroupName != null">
+                `label_group_name` = #{labelGroupName,jdbcType=VARCHAR},
+            </if>
+            <if test="labelGroupDesc != null">
+                `label_group_desc` = #{labelGroupDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="labelClassificationId != null">
+                `label_classification_id` = #{labelClassificationId,jdbcType=BIGINT},
+            </if>
+        </set>
+        WHERE `id`=#{id}
+    </update>
+
+    <delete id="logicalDeleteByPrimaryKey" parameterType="java.lang.Long">
+        UPDATE label_group SET `deleted`=1 WHERE `id`=#{id}
+    </delete>
+
+    <delete id="physicalDeleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM label_group WHERE `id`=#{id}
+    </delete>
+
+    <select id="selectByCondition" parameterType="com.hn.onelabel.server.infrastructure.db.query.LabelGroupQuery" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM label_group
+        WHERE deleted=0
+        <if test="labelGroupNameKeywords != null">
+            AND `label_group_name` LIKE CONCAT('%', #{labelGroupNameKeywords,jdbcType=VARCHAR} ,'%')
+        </if>
+        <if test="labelGroupCode != null">
+            AND `label_group_code` = #{labelGroupCode,jdbcType=VARCHAR}
+        </if>
+        <if test="labelClassificationId != null">
+            AND `label_classification_id` = #{labelClassificationId,jdbcType=BIGINT}
+        </if>
+        <if test="creatorKeyword != null">
+            AND `creator` = LIKE CONCAT('%', #{creatorKeyword,jdbcType=VARCHAR} ,'%')
+        </if>
+        <if test="useSorting == true">
+            ORDER BY
+            <foreach collection="sortModelList" item="sortModel" separator=",">
+                ${sortModel.sortField} ${sortModel.sortType}
+            </foreach>
+        </if>
+        <if test="usePaging == true">
+            LIMIT #{offset},#{rows}
+        </if>
+    </select>
+
+</mapper>
